@@ -33,9 +33,6 @@ typedef struct event_queue_t {
 
 typedef event_queue_t* event_queue_ptr;
 
-void event_non_savable_run();
-
-
 event_ptr event_create(event_t event, event_ptr next);
 void event_destroy(event_ptr event);
 

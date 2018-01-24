@@ -2,6 +2,9 @@
 #define _C_TYPE_H_
 
 #include <stdio.h>
+
+
+
 // system debug
 #define SYS_DEBUG           1
 
@@ -46,5 +49,14 @@
 #define EVENT_ID_UART_RX           0x02
 #define EVENT_ID_INT0              0x08
 #define EVENT_ID_INT1              0x09
+
+// KEY - VALUE
+#define KEY_READ_ADC                "kra\0"
+#define KEY_READ_GPIO               "krg\0"
+#define KEY_WRITE_GPIO              "kwg\0"
+#define KEY_READ_COUNTER            "krc\0"
+#define KEY_WRITE_COUNTER           "kwc\0"
+
+
 
 #endif  //  _C_TYPE_H_

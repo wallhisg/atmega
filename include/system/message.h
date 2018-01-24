@@ -3,6 +3,9 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <c_def.h>
+
+// define Instruction register size 
 
 
 typedef struct {
@@ -19,6 +22,8 @@ typedef struct {
 } message_vector_t;
 
 typedef message_vector_t* message_vector_ptr;
+
+void message_process();
 
 
 void message_add(message_vector_ptr vector, message_ptr msg);

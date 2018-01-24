@@ -2,19 +2,6 @@
 
 event_queue_ptr event_queue;
 
-void event_non_savable_run()
-{
-    printf("event_queue->event %p\r\n", event_queue->event);
-    event_t event;
-    while (event_queue->length > 0)
-    {
-        event = event_dequeue();
-        event_dispatch(event);
-    }
-}
-
-
-
 void event_queue_init()
 {
     event_queue = event_queue_create();

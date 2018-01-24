@@ -9,13 +9,16 @@ json_object_ptr json_create_object(char* key, char* value,
         printf("Error creating a new object.\n");
         exit(0);
     }
+    
     uint8_t len = strlen(key) + 1;
     new_object->key = (char*)malloc(len * sizeof(char));
     memcpy(new_object->key, key, len);
+    
     len = strlen(value) + 1;
     new_object->value = (char*)malloc(len * sizeof(char));
     memcpy(new_object->value, value, len);
     new_object->next = next;
+    
     return new_object;
 }
 

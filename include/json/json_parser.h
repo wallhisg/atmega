@@ -21,4 +21,12 @@ json_schema_ptr json_parser(char* json);
 ********************************************************************/
 json_tuple_flag_t consume_char(char c, json_tuple_flag_t flags);
 
+/********************************************************************
+ * FunctionName : is_tok_letter
+ * Description  : Return true if letter is JTK
+ * Parameter    : char
+ * Return       : bool
+********************************************************************/
+bool is_tok_letter(const char c);
+
 #endif  // _JSON_PARSER_H_

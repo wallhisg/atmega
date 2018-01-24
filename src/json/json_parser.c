@@ -6,7 +6,7 @@
  *                                  TYPE_OBJECT     TYPE_ARRAY
  * Parameter    : char*
  * Return       : json_get_type
- * NOTE repair case {"a" 
+ * NOTE repair case {"a" -> fixed by tok_counter
 ********************************************************************/
 json_schema_ptr json_parser(char* json)
 {
@@ -21,11 +21,16 @@ json_schema_ptr json_parser(char* json)
     uint8_t index = 0;
     char* json_ = (char*)malloc((end +1) * sizeof(char));
     
+    // token counter, if counter is even return true
+    uint8_t tok_counter = 0;
     
     // verify schema
     for (begin = 0; begin <= end; begin++ )
     {
         flags = consume_char(json[begin], flags);
+        
+        if (is_tok_letter(json[begin]))
+            tok_counter++;
 
         if (flags.tribool == TRIBOOL_FALSE)
         {
@@ -40,6 +45,11 @@ json_schema_ptr json_parser(char* json)
             json_[index++] = json[begin];
 
     }
+    
+    tok_counter = tok_counter % 2;
+    if (tok_counter)
+        flags.tribool = TRIBOOL_INDETERMINATE;
+    
     json_schema_ptr schema = json_schema_create();
     if (flags.tribool == TRIBOOL_FALSE || flags.tribool == TRIBOOL_INDETERMINATE)
     {
@@ -57,7 +67,6 @@ json_schema_ptr json_parser(char* json)
         free(json_);
         return schema;        
     }
-
 }
 
 /********************************************************************
@@ -236,4 +245,20 @@ json_tuple_flag_t consume_char(char c, json_tuple_flag_t flags)
         }
     }
     return  flags_;
+}
+
+bool is_tok_letter(const char c)
+{
+    bool flag;
+    switch (c)
+    {
+        
+        case '{': case '}': case '\"': case '[': case ']':         
+            flag = true;
+            break;
+        default:
+            flag = false;
+    }
+    
+    return flag;
 }

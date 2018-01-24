@@ -1,5 +1,9 @@
 #include <system/message.h>
 
+void message_process()
+{
+    
+}
 
 void message_add(message_vector_ptr vector, message_ptr msg)
 {
@@ -43,7 +47,6 @@ void message_remove(message_vector_ptr vector, message_ptr msg)
         vector->message[vector->size - 1] = NULL;
         vector->size--;
     }
-    
 }
 
 message_vector_ptr message_vector_create()
@@ -51,7 +54,7 @@ message_vector_ptr message_vector_create()
     message_vector_ptr vector = (message_vector_ptr)malloc(sizeof(message_vector_t));
     if (vector == NULL)
     {
-//         debug(MSG_OBJ_MESSAGE_QUEUE_IS_NULL);
+        debug(MSG_OBJ_MESSAGE_QUEUE_IS_NULL);
         free(vector);
     }
     

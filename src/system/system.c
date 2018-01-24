@@ -7,6 +7,7 @@ message_vector_ptr msg_queue;
 
 void system_init()
 {
+
     uart_init(BIT_RATE_9600);
     gpio_init();
     event_queue_init();
@@ -85,6 +86,11 @@ void json_process(uint8_t* str)
         {
             json_object_ptr head = NULL;
             head = json_parser_object(new_schema->str, head);
+            if (strcmp(head->key, KEY_WRITE_GPIO) == 0)
+            {
+                printf("Writing GPIO. \r\n");
+                gpio_blinky();
+            }
             printf_key_value(head);
             delete_json_list(head);
         }
