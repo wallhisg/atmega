@@ -1,10 +1,9 @@
 #include <driver/gpio/gpio.h>
 
-
 void gpio_init()
 {
-    gpio_output_set(PORTD_ADDR, BIT1);
-	gpio_input_set(PORTD_ADDR, BIT0);
+    gpio_set_input_bit(PORT_D, BIT0);
+    gpio_set_output_bit(PORT_D, BIT1);
 
     GICR = 1 << INT0 | 1 << INT1;
     MCUCR = (1 << ISC01 | 0 << ISC00) | (1 << ISC11 | 0 << ISC10);
@@ -17,51 +16,51 @@ uint8_t* gpio_blinky()
 }
 
 // active low
-bool gpio_read_pin_state(PORT_ADDR port, BIT_X bit)
+bool gpio_read_pin_state(PORT_X port, BIT_X bit)
 {
-    gpio_input_set(port, bit);
-    volatile register_size* PINs = (void *)(port);
-    if (*PINs & _BV(bit))
+    gpio_set_input_bit(port, bit);
+    if (register_pin_read_bit(port, bit))
     {
-        
         return false;
     }
-    else    // active
+    else    // active low
     {
-        gpio_output_set(port, bit);
-        gpio_set_low(port, bit);
-        _delay_ms(200);
         return true;
-        
     }
 }
 
-void gpio_input_set(PORT_ADDR port, BIT_X bit)
+void gpio_set_input_bit(PORT_X port, BIT_X bit)
 {
-    volatile register_size* DDR = (void *)(port + 1);
-    *DDR &= ~_BV(bit);
-    volatile register_size* PORT = (void *)(port + 2);
-    *PORT |= _BV(bit);    // enable internal pull-up 
+    // write to DDRX 
+    // 0 - input;   1 - output
+    register_ddr_clear_bit(port, bit);
+    // enable internal pull-up 
+    register_port_set_bit(port, bit);
 }
 
-void gpio_output_set(PORT_ADDR port, BIT_X bit)
+void gpio_set_output_bit(PORT_X port, BIT_X bit)
 {
-    volatile register_size* DDR = (void *)(port + 1);
-    *DDR |= _BV(bit); 
+    // write to DDRX 
+    // 0 - input;   1 - output
+    register_ddr_set_bit(port, bit);
 }
 
-void gpio_set_high(PORT_ADDR port, BIT_X bit)
+void gpio_set_pin_high(PORT_X port, BIT_X bit)
 {
-    gpio_output_set(port, bit);
-    volatile register_size* PORT = (void *)(port + 2);
-    *PORT |= _BV(bit);
+    gpio_set_output_bit(port, bit);
+    register_port_set_bit(port, bit);
 }
 
-void gpio_set_low(PORT_ADDR port, BIT_X bit)
+void gpio_set_pin_low(PORT_X port, BIT_X bit)
 {
-    gpio_output_set(port, bit);
-    volatile register_size* PORT = (void *)(port + 2);
-    *PORT &= ~_BV(bit);
+    gpio_set_output_bit(port, bit);
+    register_port_clear_bit(port, bit);
+}
+
+void gpio_toggle_pin(PORT_X port, BIT_X bit)
+{
+    gpio_set_output_bit(port, bit);
+    register_port_toggle_bit(port, bit);
 }
 
 void int0_isr()
@@ -82,3 +81,5 @@ void int1_isr()
     event_enqueue(event);
 
 }
+
+

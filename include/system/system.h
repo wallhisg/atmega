@@ -7,6 +7,7 @@
 #include <system/register.h>
 #include <driver/gpio/gpio.h>
 #include <driver/uart/uart.h>
+#include <driver/timer/timer.h>
 #include <system/event.h>
 #include <system/message.h>
 #include <json/json.h>

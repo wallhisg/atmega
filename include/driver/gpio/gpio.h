@@ -9,11 +9,9 @@
 #include <avr/sfr_defs.h>
 #include <util/delay.h>
 
+#include <c_def.h>
 #include <system/event.h>
 #include <system/register.h>
-#include <c_def.h>
-
-typedef uint8_t register_size;
 
 // PINx is based address
 // DDRx = PORTx_ADDR + 1
@@ -24,26 +22,18 @@ typedef enum {
     PORTD_ADDR = 0x30
 } PORT_ADDR;
 
-typedef enum {
-    BIT0 = 0x00,
-    BIT1 = 0x01,
-    BIT2 = 0x02,
-    BIT3 = 0x03,
-    BIT4 = 0x04,
-    BIT5 = 0x05,
-    BIT6 = 0x06,
-    BIT7 = 0x07
-} BIT_X;
 
 void gpio_init();
 uint8_t* gpio_blinky();
 
-bool gpio_read_pin_state(PORT_ADDR port, BIT_X bit);
-void gpio_input_set(PORT_ADDR port, BIT_X bit);
-void gpio_output_set(PORT_ADDR port, BIT_X bit);
+void gpio_set_input_bit(PORT_X port, BIT_X bit);
+void gpio_set_output_bit(PORT_X port, BIT_X bit);
 
-void gpio_set_high(PORT_ADDR port, BIT_X bit);
-void gpio_set_low(PORT_ADDR port, BIT_X bit);
+void gpio_set_pin_high(PORT_X port, BIT_X bit);
+void gpio_set_pin_low(PORT_X port, BIT_X bit);
+void gpio_toggle_pin(PORT_X port, BIT_X bit);
+
+bool gpio_read_pin_state(PORT_X port, BIT_X bit);
 
 void int0_isr(void) asm("__vector_1") __attribute__ ((signal, __INTR_ATTRS));
 void int1_isr(void) asm("__vector_2") __attribute__ ((signal, __INTR_ATTRS));

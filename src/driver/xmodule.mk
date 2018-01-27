@@ -1,5 +1,5 @@
 LOCAL_BASE	:= src
-LOCAL_MDLS	:= driver/gpio driver/uart
+LOCAL_MDLS	:= driver/gpio driver/uart driver/timer
 LOCAL_BLDS	:= $(addprefix $(LOCAL_BASE)/, $(LOCAL_MDLS))
 LOCAL_INCS	:= $(wildcard $(INCLUDE_DIRS)/$(LOCAL_MDLS)/*.h)
 
@@ -17,6 +17,3 @@ $(LOCAL_DEPS): $(LOCAL_SRCS) $(LOCAL_INCS)
 	@$(CC) -MM $< > $@
 
 $(LOCAL_OBJS): $(LOCAL_SRCS) $(LOCAL_DEPS)
-
-
-

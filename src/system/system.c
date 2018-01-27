@@ -1,16 +1,16 @@
 #include <system/system.h>
-#include <driver/gpio/gpio.h>
-#include <driver/uart/uart.h>
+
 
 extern event_queue_ptr event_queue;
 message_vector_ptr msg_queue;
 
 void system_init()
 {
-
+    register_init();
     uart_init(BIT_RATE_9600);
     gpio_init();
     event_queue_init();
+    timer_init();
     msg_queue = message_vector_create();
 }
 

@@ -44,6 +44,7 @@ json_object_ptr json_object_insert(char* key, char* value, json_object_ptr head)
         json_object_ptr cursor = head;
         while(cursor->next != NULL)
             cursor = cursor->next;
+        
         cursor->next = json_create_object(key, value, NULL);
         return head;
     }

@@ -1,7 +1,5 @@
 #include <driver/uart/ring_buffer.h>
 
-
-
 buffer_ptr ringbuf_create(void)
 {
     buffer_ptr buff = (buffer_ptr)malloc(sizeof(ring_buffer_t));

@@ -6,5 +6,5 @@ void blinky(PORT_ADDR port, BIT_X bit)
 //     volatile register_size* PORT = (register_size *)(port + 2);
 //     *DDR |= bit;
 //     *PORT ^= _BV(bit);
-    gpio_output_set(PORTD_ADDR, bit);
+//     gp(PORTD_ADDR, bit);
 }
