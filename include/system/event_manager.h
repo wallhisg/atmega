@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <driver/gpio/gpio.h>
 
-void blinky(PORT_ADDR port, BIT_X bit);
+
 
 
 

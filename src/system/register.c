@@ -99,19 +99,19 @@ void register_pin_unlock(PORT_X port, BIT_X bit)
 }
 
 
-void register_write_byte(uint16_t addr, uint8_t value)
+void register_write_byte(int addr, uint8_t value)
 {
     volatile register_size* ADDR = (void *)(addr);
     *ADDR = value;
 }
 
-void register_set_bit(uint16_t addr, BIT_X bit)
+void register_set_bit(int addr, BIT_X bit)
 {
     volatile register_size* ADDR = (void *)(addr);
     *ADDR |= _BV(bit);
 }
 
-void register_clear_bit(uint16_t addr, BIT_X bit)
+void register_clear_bit(int addr, BIT_X bit)
 {
     volatile register_size* ADDR = (void *)(addr);
     *ADDR &= ~_BV(bit);      

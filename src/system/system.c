@@ -17,7 +17,6 @@ void system_init()
 void system_run()
 {
     schedule();
-//     event_non_savable_run();
 }
 
 void schedule()

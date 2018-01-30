@@ -8,9 +8,11 @@
 
 #include <system/register.h>
 #include <driver/gpio/gpio.h>
+#include <driver/timer/timer_task.h>
 
-#define T0_DELAY_1MS_VALUE              -16
-#define T0_DELAY_10MS_VALUE             96
+#define F_OSC                           16
+#define T0_DELAY_1MS_VALUE              (256-F_OSC)
+#define T0_DELAY_10MS_VALUE             256-10*F_OSC
 
 // TIMER0 - 8 bit
 #define TCNT0_ADDR                      0x52

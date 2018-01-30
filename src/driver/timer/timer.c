@@ -6,10 +6,29 @@ void timer_init()
     register_write_byte(TCNT0_ADDR, T0_DELAY_1MS_VALUE);
     // enable interrupt timer 0 - Set T0IE0
     register_set_bit(TIMSK_ADDR, BIT0);
+    
+    timer_queue_init();
+    // Blinky led
+    timer_task_ptr task1 = create_timer_task(0, gpio_blinky);
+    timer_add_task(task1);
 }
+
 
 void timer0_isr(void)
 {
-    register_write_byte(TCNT0_ADDR, T0_DELAY_10MS_VALUE);
-    gpio_toggle_pin(PORT_B, BIT3);
+    register_write_byte(TCNT0_ADDR, T0_DELAY_1MS_VALUE);
+//     gpio_toggle_pin(PORT_B, BIT3);
+    
+    timer_task_ptr task = timer_get_task();
+    task->counter++;
+    
+//     printf("Task counter %d\r\n", task->counter);
+    if (task->counter > 10)
+    {
+        task->counter = 0;
+        
+        if (task->vCallback != NULL)
+            task->vCallback();
+    }
 }
+

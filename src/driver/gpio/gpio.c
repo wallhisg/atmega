@@ -11,7 +11,8 @@ void gpio_init()
 
 uint8_t* gpio_blinky()
 {
-    PORTB ^= 1;
+//     PORTB ^= 1;
+    gpio_toggle_pin(PORT_B, BIT1);
     return NULL;
 }
 
