@@ -111,21 +111,13 @@ void uart_regist_event()
     }
 }
 
-void uart_rx_callback()
-{
-    uint8_t* buff;
-    buff = uart_read_frame();
-    printf("%s\r\n", buff);
-    free(buff);
-}
-
 const uint8_t uart_read_byte()
 {
     uint8_t byte = ringbuf_read_one_byte(rx_buf);
     return byte;
 }
 
-uint8_t* uart_read_frame()
+void* uart_read_frame()
 {
     if (rx_signal.counter == 0)
         return 0;

@@ -8,8 +8,7 @@
 
 #define event_init              (event_t){0,EVENT_PRIORITY_LOW, NULL}, NULL
 
-typedef uint8_t* (*event_callback)(void);
-typedef uint16_t event_binary_t;
+typedef void* (*event_callback)(void*);
 
 typedef enum {
     EVENT_PRIORITY_LOW,

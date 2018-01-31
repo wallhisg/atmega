@@ -22,9 +22,17 @@ typedef enum {
     PORTD_ADDR = 0x30
 } PORT_ADDR;
 
+typedef struct {
+    PORT_X port;
+    BIT_X bit;
+} gpio_port_t;
+
+typedef gpio_port_t* gpio_port_ptr;
 
 void gpio_init();
-uint8_t* gpio_blinky();
+gpio_port_ptr gpio_port_create(PORT_X port, BIT_X bit);
+
+void* gpio_blinky(void *args);
 
 void gpio_set_input_bit(PORT_X port, BIT_X bit);
 void gpio_set_output_bit(PORT_X port, BIT_X bit);
@@ -32,6 +40,8 @@ void gpio_set_output_bit(PORT_X port, BIT_X bit);
 void gpio_set_pin_high(PORT_X port, BIT_X bit);
 void gpio_set_pin_low(PORT_X port, BIT_X bit);
 void gpio_toggle_pin(PORT_X port, BIT_X bit);
+void gpio_lock_pin(PORT_X port, BIT_X bit);
+void* gpio_unlock_pin(void *args);
 
 bool gpio_read_pin_state(PORT_X port, BIT_X bit);
 

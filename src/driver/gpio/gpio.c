@@ -2,17 +2,31 @@
 
 void gpio_init()
 {
-    gpio_set_input_bit(PORT_D, BIT0);
-    gpio_set_output_bit(PORT_D, BIT1);
+    gpio_set_input_bit(PORT_D, BIT_0);
+    gpio_set_output_bit(PORT_D, BIT_1);
 
     GICR = 1 << INT0 | 1 << INT1;
     MCUCR = (1 << ISC01 | 0 << ISC00) | (1 << ISC11 | 0 << ISC10);
 }
 
-uint8_t* gpio_blinky()
+gpio_port_ptr gpio_port_create(PORT_X port, BIT_X bit)
 {
-//     PORTB ^= 1;
-    gpio_toggle_pin(PORT_B, BIT1);
+    gpio_port_ptr port_ = (gpio_port_ptr)malloc(sizeof(gpio_port_t));
+    if (port_ == NULL)
+    {
+        free(port_);
+        return NULL;
+    }
+    port_->port = port;
+    port_->bit = bit;
+    return port_;
+    
+}
+void* gpio_blinky(void *args)
+{
+    gpio_port_ptr port = args;
+    gpio_toggle_pin(port->port, port->bit);
+    free(port);
     return NULL;
 }
 
@@ -64,12 +78,27 @@ void gpio_toggle_pin(PORT_X port, BIT_X bit)
     register_port_toggle_bit(port, bit);
 }
 
+void gpio_lock_pin(PORT_X port, BIT_X bit)
+{
+    register_pin_lock(port, bit);
+}
+
+void* gpio_unlock_pin(void *args)
+{
+    gpio_port_ptr port = args;
+    register_pin_unlock(port->port, port->bit);
+    return NULL;
+}
+
 void int0_isr()
 {
     event_t event;
     event.id = EVENT_ID_INT0;
     event.priority = EVENT_PRIORITY_HIGH;
-    event.callback = gpio_blinky;
+    
+    gpio_port_ptr port = gpio_port_create(PORT_B, BIT_1);
+    event.callback = gpio_blinky(port);
+    
     event_enqueue(event);
 }
 
@@ -78,7 +107,10 @@ void int1_isr()
     event_t event;
     event.id = EVENT_ID_INT1;
     event.priority = EVENT_PRIORITY_HIGH;
-    event.callback = gpio_blinky;
+
+    gpio_port_ptr port = gpio_port_create(PORT_B, BIT_2);
+    event.callback = gpio_blinky(port);
+
     event_enqueue(event);
 
 }

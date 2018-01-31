@@ -2,7 +2,7 @@
 
 timer_queue_ptr timer_queue;
 
-timer_task_ptr create_timer_task(uint16_t counter, event_callback callback)
+timer_task_ptr timer_task_create(uint16_t pv, event_callback callback, void* arg)
 {
     timer_task_ptr timer_task = (timer_task_ptr)malloc(sizeof(timer_task_t));
     if (timer_task == NULL)
@@ -10,18 +10,20 @@ timer_task_ptr create_timer_task(uint16_t counter, event_callback callback)
         free(timer_task);
         return NULL;
     }
-    timer_task->counter = counter;
+    timer_task->counter = 0;
+    timer_task->pv = pv;
     timer_task->state = WAITING;
-    timer_task->vCallback = callback;
+    timer_task->callback = callback;
+    timer_task->arg = arg;
     return timer_task;
 }
 
-void destroy_timer_task(timer_task_ptr timer_task)
+void timer_task_destroy(timer_task_ptr timer_task)
 {
     free(timer_task);
 }
 
-timer_queue_ptr create_timer_queue(uint8_t size)
+timer_queue_ptr timer_queue_create(uint8_t size)
 {
     timer_queue_ptr timer_queue = (timer_queue_ptr)malloc(sizeof(timer_queue_t));
     if (timer_queue == NULL)
@@ -36,7 +38,7 @@ timer_queue_ptr create_timer_queue(uint8_t size)
 
 void timer_queue_init()
 {
-    timer_queue = create_timer_queue(TIMER_TASK_SIZE);
+    timer_queue = timer_queue_create(TIMER_TASK_SIZE);
     if (timer_queue != NULL)
         timer_queue->task = (timer_task_t**)realloc(timer_queue->task, sizeof(timer_task_t*) * timer_queue->size);
     
@@ -68,16 +70,18 @@ timer_task_ptr timer_get_task()
         if (timer_queue->task[at] != NULL)
         {
             if (timer_queue->task[at]->state == RUNNING)
+            {
+                timer_queue->task[at]->state = WAITING;
                 return timer_queue->task[at];
+            }
             else if (timer_queue->task[at]->state == READY)
             {
                 timer_queue->task[at]->state = RUNNING;
                 return timer_queue->task[at];
             }
-            else
+            else if (timer_queue->task[at]->state == WAITING)
             {
                 timer_queue->task[at]->state = READY;
-                timer_queue->length--;
                 break;
             }
         }
@@ -93,9 +97,10 @@ void timer_remove_task(timer_task_ptr task)
     {
         if (timer_queue->task[at] == task)
         {
-            destroy_timer_task(task);
+            timer_task_destroy(task);
 //             if (at == (timer_queue->size - 1))
             timer_queue->task[at] = NULL;
+            timer_queue->length--;
                 
         }
     }
@@ -107,6 +112,11 @@ uint16_t timer_get_counter()
         return timer_queue->task[0]->counter;
     
     return 0;
+}
+
+uint8_t get_timer_queue_length()
+{
+    return timer_queue->length;
 }
 
 void task_print()

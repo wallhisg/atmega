@@ -29,14 +29,14 @@ typedef enum {
 } PORT_X; 
 
 typedef enum {
-    BIT0 = 0x00,
-    BIT1 = 0x01,
-    BIT2 = 0x02,
-    BIT3 = 0x03,
-    BIT4 = 0x04,
-    BIT5 = 0x05,
-    BIT6 = 0x06,
-    BIT7 = 0x07
+    BIT_0 = 0x00,
+    BIT_1 = 0x01,
+    BIT_2 = 0x02,
+    BIT_3 = 0x03,
+    BIT_4 = 0x04,
+    BIT_5 = 0x05,
+    BIT_6 = 0x06,
+    BIT_7 = 0x07
 } BIT_X;
 
 typedef struct {

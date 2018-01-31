@@ -9,8 +9,6 @@
 
 #define TIMER_TASK_SIZE     3
 
-typedef void (*vCallBack)(void);
-
 typedef enum {
     RUNNING,
     READY,
@@ -19,8 +17,10 @@ typedef enum {
 
 typedef struct {
     uint16_t counter;
+    uint16_t pv;
     task_status_e state;
-    event_callback vCallback;
+    event_callback callback;
+    void* arg;
 } timer_task_t;
 
 typedef timer_task_t* timer_task_ptr;
@@ -33,16 +33,16 @@ typedef struct {
 
 typedef timer_queue_t* timer_queue_ptr;
 
-timer_task_ptr create_timer_task(uint16_t counter, event_callback callback);
-void destroy_timer_task(timer_task_ptr timer_task);
+timer_task_ptr timer_task_create(uint16_t pv, event_callback callback, void* arg);
+void timer_task_destroy(timer_task_ptr timer_task);
 
 void timer_queue_init();
-timer_queue_ptr create_timer_queue(uint8_t size);
+timer_queue_ptr timer_queue_create(uint8_t size);
 bool timer_add_task(timer_task_ptr tm_task);
 timer_task_ptr timer_get_task();
 void timer_remove_task(timer_task_ptr task);
 uint16_t timer_get_counter();
-
+uint8_t get_timer_queue_length();
 void task_print();
 
 #endif  //  _TIMER_TASK_H_

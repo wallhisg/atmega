@@ -113,6 +113,6 @@ void event_dispatch(event_t event)
 {
     if (event.callback != NULL)
     {
-        event.callback();
+        event.callback(NULL);
     }
 }

@@ -42,7 +42,8 @@ void event_schedule()
         else if (event.priority == EVENT_PRIORITY_LOW)
         {
             msg->type = event.id;
-            msg->pData = event.callback();
+            msg->pData = (uint8_t*)event.callback(NULL);
+            printf("pData %s\r\n", msg->pData);
             
             message_add(msg_queue, msg);
         }
@@ -65,7 +66,7 @@ void dispatch(event_t event)
 {
     if (event.callback != NULL)
     {
-        event.callback();
+        event.callback(NULL);
     }
 }
 
@@ -80,6 +81,9 @@ void json_process(uint8_t* str)
         if (new_schema->type == TYPE_STRING)
         {
             printf("json output string: %s\r\n", new_schema->str);
+            
+            gpio_port_ptr port = gpio_port_create(PORT_B, BIT_1);
+            gpio_blinky(port);
         }
         else if (new_schema->type == TYPE_OBJECT)
         {
@@ -88,7 +92,8 @@ void json_process(uint8_t* str)
             if (strcmp(head->key, KEY_WRITE_GPIO) == 0)
             {
                 printf("Writing GPIO. \r\n");
-                gpio_blinky();
+                gpio_port_ptr port = gpio_port_create(PORT_B, BIT_2);
+                gpio_blinky(port);
             }
             printf_key_value(head);
             delete_json_list(head);

@@ -8,7 +8,7 @@
 #include <driver/gpio/gpio.h>
 
 
-
+void event_gpio_dispatch(void *args);
 
 
 #endif  //  _EVENT_MANAGER_H_

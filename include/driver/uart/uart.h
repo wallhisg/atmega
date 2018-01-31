@@ -53,12 +53,12 @@ void uart_rx_isr(void) asm("__vector_11") __attribute__ ((signal, __INTR_ATTRS))
 void uart_regist_event();
 
 const uint8_t uart_read_byte();
-uint8_t* uart_read_frame();
+void* uart_read_frame();
 const uint8_t uart_get_byte_used();
 void uart_signal_reset();
 const uint8_t uart_signal_counter();
 
-void uart_rx_callback();
+
 
 #endif
 
